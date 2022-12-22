@@ -30,7 +30,8 @@ class QlGrid
     {
         if (0 >= count($this->getData())) return '';
 
-        $html[] = $this->getHtmlTag(self::TABLE);
+        $attributes = ['id' => $this->getTableId(), 'class' => $this->getTableClass(), 'style' => $this->getTableClass(), ];
+        $html[] = $this->getHtmlTag(self::TABLE, false, $attributes);
         $html[] = $this->getHtmlTableHead($this->getColumns());
         $html[] = $this->getHtmlTableBody();
         $html[] = $this->getHtmlTag(self::TABLE, true);
@@ -83,9 +84,15 @@ class QlGrid
         return $html;
     }
 
-    public function getHtmlTag(string $value, bool $end = false): string
+    public function getHtmlTag(string $value, bool $end = false, array $attributes = []): string
     {
-        return self::TAG_OPEN . ($end ? '/' : '') . $value . self::TAG_CLOSE;
+        $attributes = array_filter($attributes);
+        if (0 < count($attributes)) array_walk($attributes, function(&$item, $key) {
+            $item = sprintf('%s="%s"', $key, $item);
+        });
+        if ($end) $attributes = [];
+        $attributes = ' ' . $this->arrayToString($attributes, '');
+        return self::TAG_OPEN . ($end ? '/' : '') . $value . $attributes . self::TAG_CLOSE;
     }
 
     public function setTableStyle(string $value = '')
