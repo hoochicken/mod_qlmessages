@@ -7,11 +7,14 @@
  */
 
 // no direct access
+use Joomla\Database\DatabaseDriver;
+
 defined('_JEXEC') or die;
 require_once dirname(__FILE__).'/helper.php';
 
 /** @var $module  */
 /** @var $params  */
-$obj_helper = new modQlmessagesHelper($module, $params);
+$helper = new modQlmessagesHelper(\Joomla\CMS\Factory::getContainer()->get(DatabaseDriver::class), $module, $params);
 
+$messages = $helper->getMessagesByFolder();
 require JModuleHelper::getLayoutPath('mod_qlmessages', $params->get('layout', 'default'));
