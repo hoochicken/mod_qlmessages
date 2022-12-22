@@ -17,6 +17,8 @@ class QlGrid
     const TABLE_ROW = 'tr';
     const TABLE_TH = 'th';
     const TABLE_TD = 'td';
+    const TAG_OPEN = '<';
+    const TAG_CLOSE = '>';
 
     public function __construct(array $data = [], ?array $columns = [])
     {
@@ -83,7 +85,7 @@ class QlGrid
 
     public function getHtmlTag(string $value, bool $end = false): string
     {
-        return $end ? '</' . $value . '>' : '<' . $value . '>';
+        return self::TAG_OPEN . ($end ? '/' : '') . $value . self::TAG_CLOSE;
     }
 
     public function setTableStyle(string $value = '')
